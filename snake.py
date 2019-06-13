@@ -1,3 +1,8 @@
+"""
+keyboard need permission.
+works better under tmux.
+"""
+
 from typing import List
 import os
 import time
@@ -16,22 +21,17 @@ class Game:
         self.map = [self.map_style * self.width for _ in range(self.height)]
         self.obj_list: List[Obj] = []
         self.snake = Snake(self.width, self.height)
-        self.snake1 = Snake(self.width, self.height)
 
         self.food = Food(self.width, self.height)
 
     def _form_obj_list(self):
         self.obj_list = []
         for body in self.snake.body_list:
-            body.style = "0"
-        for body in self.snake1.body_list:
             body.style = "#"
 
-        self.snake.body_list[-1].style = "C"
-        self.snake1.body_list[-1].style = "A"
+        self.snake.body_list[-1].style = "A"
 
         self.obj_list.extend(self.snake.body_list)
-        self.obj_list.extend(self.snake1.body_list)
         self.obj_list.append(self.food)
 
     def start(self):
@@ -57,25 +57,26 @@ class Game:
                 self.snake.move(3)
                 continue
 
-            if keyboard.is_pressed('w'):
-                self.snake1.move(0)
+            if keyboard.is_pressed('w'):  # another way to control the snake
+                self.snake.move(0)
                 continue
             if keyboard.is_pressed('s'):
-                self.snake1.move(1)
+                self.snake.move(1)
                 continue
             if keyboard.is_pressed('a'):
-                self.snake1.move(2)
+                self.snake.move(2)
                 continue
             if keyboard.is_pressed('d'):
-                self.snake1.move(3)
+                self.snake.move(3)
                 continue
 
-
     def update(self):
-        os.system('clear')
         # update map by object state.
-        view_map = copy.deepcopy(self.map)
+
+        os.system('clear')
+        view_map = copy.deepcopy(self.map)  # the view map is a deep copy of map, discarded in each update.
         print('snake head: ', self.snake.body_list[-1].pos, 'length: ', len(self.snake.body_list))
+
         for o in self.obj_list:
             x, y = o.pos
             if x < self.height and y < self.width:  # if x, y are outside of the map
