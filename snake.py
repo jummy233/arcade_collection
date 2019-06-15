@@ -18,6 +18,7 @@ class Game:
     map_style = '.'
 
     def __init__(self):
+        self.pause = False
         self.map = [self.map_style * self.width for _ in range(self.height)]
         self.obj_list: List[Obj] = []
         self.snake = Snake(self.width, self.height)
@@ -36,6 +37,13 @@ class Game:
 
     def start(self):
         while self.run:
+            if keyboard.is_pressed('p'):
+                self.pause = True
+                while self.pause:
+                    time.sleep(0.02)
+                    if keyboard.is_pressed('w') or keyboard.is_pressed('s') or keyboard.is_pressed('a') or keyboard.is_pressed('d'):
+                        self.pause = False
+
             self._form_obj_list()
             self.update()
             self.snake.move()
@@ -44,29 +52,16 @@ class Game:
                 self.food = Food(self.width, self.height)
                 self.snake.eat()
 
-            if keyboard.is_pressed('up'):
+            if keyboard.is_pressed('up') or keyboard.is_pressed('w'):
                 self.snake.move(0)
                 continue
-            if keyboard.is_pressed('down'):
+            if keyboard.is_pressed('down') or keyboard.is_pressed('s'):
                 self.snake.move(1)
                 continue
-            if keyboard.is_pressed('left'):
+            if keyboard.is_pressed('left') or keyboard.is_pressed('a'):
                 self.snake.move(2)
                 continue
-            if keyboard.is_pressed('right'):
-                self.snake.move(3)
-                continue
-
-            if keyboard.is_pressed('w'):  # another way to control the snake
-                self.snake.move(0)
-                continue
-            if keyboard.is_pressed('s'):
-                self.snake.move(1)
-                continue
-            if keyboard.is_pressed('a'):
-                self.snake.move(2)
-                continue
-            if keyboard.is_pressed('d'):
+            if keyboard.is_pressed('right') or keyboard.is_pressed('d'):
                 self.snake.move(3)
                 continue
 
