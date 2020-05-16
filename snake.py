@@ -41,7 +41,10 @@ class Game:
                 self.pause = True
                 while self.pause:
                     time.sleep(0.02)
-                    if keyboard.is_pressed('w') or keyboard.is_pressed('s') or keyboard.is_pressed('a') or keyboard.is_pressed('d'):
+                    if (keyboard.is_pressed('w')
+                            or keyboard.is_pressed('s')
+                            or keyboard.is_pressed('a')
+                            or keyboard.is_pressed('d')):
                         self.pause = False
 
             self._form_obj_list()
@@ -69,12 +72,16 @@ class Game:
         # update map by object state.
 
         os.system('clear')
-        view_map = copy.deepcopy(self.map)  # the view map is a deep copy of map, discarded in each update.
-        print('snake head: ', self.snake.body_list[-1].pos, 'length: ', len(self.snake.body_list))
+        # the view map is a deep copy of map, discarded in each update.
+        view_map = copy.deepcopy(self.map)
+        print('snake head: ',
+              self.snake.body_list[-1].pos,
+              'length: ', len(self.snake.body_list))
 
         for o in self.obj_list:
             x, y = o.pos
-            if x < self.height and y < self.width:  # if x, y are outside of the map
+            # if x, y are outside of the map
+            if x < self.height and y < self.width:
                 map_row = view_map[x]
                 map_dots = [map_row[i] for i in range(len(map_row))]
                 map_dots[y] = o.style
@@ -110,7 +117,8 @@ class Snake:
     body_list: List[SnakeBody] = []
 
     def __init__(self, width, height):
-        self.body_list.append(SnakeBody(random.randint(0, height - 1), random.randint(0, width - 1)))
+        self.body_list.append(SnakeBody(random.randint(
+            0, height - 1), random.randint(0, width - 1)))
         self.direction = 0  # init direction 0 left, 1 right, 2 up, 3 down.
 
     def eat(self):
@@ -158,4 +166,3 @@ class Snake:
 if __name__ == "__main__":
     game = Game()
     game.start()
-
